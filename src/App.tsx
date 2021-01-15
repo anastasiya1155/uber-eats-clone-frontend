@@ -1,23 +1,8 @@
 import React from 'react';
+import {LoggedOutRouter} from './routers/logged-out-router';
 
 function App() {
-  return (
-    <div className="bg-black">
-      <header className="text-xl text-white">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <LoggedOutRouter />;
 }
 
 export default App;
