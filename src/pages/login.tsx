@@ -1,14 +1,43 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { ApolloError, gql, useMutation } from '@apollo/client';
+import { FormError } from '../components/form-error';
+import { loginMutationVariables, loginMutation } from '../api-types/loginMutation';
+
+const LOGIN_MUTATION = gql`
+  mutation loginMutation($loginInput: LoginInput!) {
+    login(input: $loginInput) {
+      ok
+      error
+      token
+    }
+  }
+`;
 
 interface ILoginForm {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 export const Login = () => {
-  const { register, errors, handleSubmit } = useForm<ILoginForm>();
-  const onSubmit = () => {};
+  const { register, errors, handleSubmit, getValues } = useForm<ILoginForm>();
+  const onCompleted = (data: loginMutation) => {
+    const { login: { ok, token } } = data;
+    if (ok) {
+
+    }
+  };
+  const onError = (error: ApolloError) => {};
+  const [loginMutation, { data: loginMutationResult, loading }] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
+    onCompleted,
+    onError,
+  });
+  const onSubmit = () => {
+    if (!loading) {
+      const { email, password } = getValues();
+      loginMutation({ variables: { loginInput: { email, password } } })
+    }
+  };
   return (
     <div className="h-screen flex items-center justify-center bg-gray-800">
       <div className="bg-white w-full max-w-lg pt-10 pb-7 rounded-lg text-center">
@@ -23,12 +52,10 @@ export const Login = () => {
             className="input mb-3"
           />
           {errors.email?.message && (
-            <span className="font-medium text-red-500">
-              {errors.email?.message}
-            </span>
+            <FormError errorMessage={errors.email?.message} />
           )}
           <input
-            ref={register({ required: "Password is required", minLength: 10 })}
+            ref={register({ required: "Password is required", minLength: 5 })}
             required
             name="password"
             type="password"
@@ -36,16 +63,13 @@ export const Login = () => {
             className="input"
           />
           {errors.password?.message && (
-            <span className="font-medium text-red-500">
-              {errors.password?.message}
-            </span>
+            <FormError errorMessage={errors.password?.message} />
           )}
           {errors.password?.type === "minLength" && (
-            <span className="font-medium text-red-500">
-              Password must be more than 10 chars.
-            </span>
+            <FormError errorMessage="Password must be more than 5 chars." />
           )}
-          <button className="mt-3 btn">Log In</button>
+          <button className="mt-3 btn">{loading ? 'Loading' : 'Log In'}</button>
+          {loginMutationResult?.login.error && <FormError errorMessage={loginMutationResult.login.error} />}
         </form>
       </div>
     </div>
