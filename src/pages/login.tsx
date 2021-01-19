@@ -7,7 +7,8 @@ import { Button } from "../components/button";
 import { FormError } from '../components/form-error';
 import { loginMutationVariables, loginMutation } from '../api-types/loginMutation';
 import uberCloneLogo from "../images/logo.svg";
-import { isLoggedInVar } from '../apollo';
+import { authTokenVar, isLoggedInVar } from '../apollo';
+import { LOCAL_STORAGE_TOKEN } from '../constants';
 
 const LOGIN_MUTATION = gql`
   mutation loginMutation($loginInput: LoginInput!) {
@@ -36,9 +37,10 @@ export const Login = () => {
   });
   const onCompleted = (data: loginMutation) => {
     const { login: { ok, token } } = data;
-    if (ok) {
+    if (ok && token) {
+      localStorage.setItem(LOCAL_STORAGE_TOKEN, token);
+      authTokenVar(token);
       isLoggedInVar(true);
-      console.log(token);
     }
   };
   const onError = (error: ApolloError) => {};

@@ -1,9 +1,28 @@
 import React from 'react';
-import { isLoggedInVar } from '../apollo';
+import { gql, useQuery } from '@apollo/client';
+
+const ME_QUERY = gql`
+  query meQuery {
+    me {
+      id
+      email
+      role
+      verified
+    }
+  }
+`
 
 export const LoggedInRouter = () => {
-  const onClick = () => {
-    isLoggedInVar(false)
+  const { data, loading, error } = useQuery(ME_QUERY);
+  if (error) {
+    console.log(error);
   }
-  return <div><h1>Logged in</h1><button onClick={onClick}>Click to log out</button></div>;
+  if (loading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <span className="font-medium text-xl tracking-wide">Loading...</span>
+      </div>
+    );
+  }
+  return <div><h1>{data?.me?.email}</h1></div>;
 }
