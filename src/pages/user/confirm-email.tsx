@@ -1,8 +1,9 @@
 import React from 'react';
 import { gql, useApolloClient, useMutation } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { verifyEmail, verifyEmailVariables } from '../../api-types/verifyEmail';
 import { useMe } from '../../hooks/useMe';
-import { useHistory } from 'react-router-dom';
 
 const VERIFY_EMAIL_MUTATION = gql`
   mutation verifyEmail($input: VerifyEmailInput!) {
@@ -40,6 +41,9 @@ export const ConfirmEmail = () => {
 
   return (
     <div className="mt-52 flex flex-col items-center justify-center">
+      <Helmet>
+        <title>Verify Email | Uber Eats Clone</title>
+      </Helmet>
       <h2 className="text-lg mb-2 font-medium">Confirming email...</h2>
       <h4 className="text-grey-700 text-sm mb-1">Please wait, don't close this page...</h4>
     </div>

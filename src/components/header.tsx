@@ -9,21 +9,23 @@ export const Header: React.FC = () => {
   const { data } = useMe();
   return (
     <>
-      {!data?.me?.verified && (
-        <div className="bg-red-500 p-3 text-xs text-center text-white">
-          <span>Please verify your email</span>
+      {!data?.me.verified && (
+        <div className="bg-red-500 p-3 text-center text-base text-white">
+          <span>Please verify your email.</span>
         </div>
       )}
       <header className="py-4">
         <div className="w-full px-5 xl:px-0 max-w-screen-xl mx-auto flex justify-between items-center">
-          <img src={uberCloneLogo} className="w-24" alt="Uber Eats Clone" />
+          <Link to="/">
+            <img src={uberCloneLogo} className="w-44" alt="Uber Eats Clone" />
+          </Link>
           <span className="text-xs">
-            <Link to="/my-profile">
-              <FontAwesomeIcon icon={faUser} className="text-xl" />
+            <Link to="/edit-profile">
+              <FontAwesomeIcon icon={faUser} className="text-3xl" />
             </Link>
           </span>
         </div>
       </header>
-      </>
+    </>
   );
 };
