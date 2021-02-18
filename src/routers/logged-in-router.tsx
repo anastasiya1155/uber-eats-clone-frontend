@@ -6,6 +6,9 @@ import { Header } from '../components/header';
 import { useMe } from "../hooks/useMe";
 import { ConfirmEmail } from '../pages/user/confirm-email';
 import { EditProfile } from '../pages/user/edit-profile';
+import { Search } from '../pages/client/search';
+import { Category } from "../pages/client/category";
+import { Restaurant } from "../pages/client/restaurant";
 
 const ClientRoutes = [
   <Route path="/confirm" key='confirm'>
@@ -13,6 +16,15 @@ const ClientRoutes = [
   </Route>,
   <Route path="/edit-profile" key='edit-profile'>
     <EditProfile />
+  </Route>,
+  <Route path="/search" key='search'>
+    <Search />
+  </Route>,
+  <Route path="/category/:slug" key='category'>
+    <Category />
+  </Route>,
+  <Route path="/restaurants/:id" key='restaurant'>
+    <Restaurant />
   </Route>,
   <Route path="/" exact key='base'>
     <Restaurants />
