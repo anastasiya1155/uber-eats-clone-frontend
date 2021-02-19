@@ -9,7 +9,7 @@ import uberCloneLogo from "../images/logo.svg";
 import { UserRole } from '../api-types/globalTypes';
 import { createAccount, createAccountVariables } from '../api-types/createAccount';
 
-const CREATE_ACCOUNT_MUTATION = gql`
+export const CREATE_ACCOUNT_MUTATION = gql`
   mutation createAccount($createAccountInput: CreateAccountInput!) {
     createAccount(input: $createAccountInput) {
       ok
