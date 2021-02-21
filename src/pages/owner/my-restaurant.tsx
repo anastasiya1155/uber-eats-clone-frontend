@@ -1,9 +1,18 @@
-import { gql, useMutation, useQuery } from '@apollo/client';
 import React from "react";
+import { gql, useMutation, useQuery } from '@apollo/client';
+import {
+  VictoryAxis,
+  VictoryChart,
+  VictoryLabel,
+  VictoryLine,
+  VictoryTheme,
+  VictoryTooltip,
+  VictoryVoronoiContainer,
+} from "victory";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams } from "react-router-dom";
 import { myRestaurant, myRestaurantVariables } from "../../api-types/myRestaurant";
-import { DISH_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
+import { DISH_FRAGMENT, ORDERS_FRAGMENT, RESTAURANT_FRAGMENT } from '../../fragments';
 import { Dish } from '../../components/dish';
 import { useMe } from '../../hooks/useMe';
 import { createPayment, createPaymentVariables } from '../../api-types/createPayment';
@@ -18,11 +27,15 @@ export const MY_RESTAURANT_QUERY = gql`
                 menu {
                     ...DishParts
                 }
+                orders {
+                    ...OrderParts
+                }
             }
         }
     }
     ${RESTAURANT_FRAGMENT}
     ${DISH_FRAGMENT}
+    ${ORDERS_FRAGMENT}
 `;
 
 const CREATE_PAYMENT_MUTATION = gql`
@@ -130,7 +143,51 @@ export const MyRestaurant = () => {
             </div>
           )}
         </div>
+        <div className="mt-20 mb-10">
+          <h4 className="text-center text-2xl font-medium">Sales</h4>
+          <div className=" max-w-lg w-full mx-auto">
+            <div className="  mt-10">
+              <VictoryChart
+                height={500}
+                theme={VictoryTheme.material}
+                width={window.innerWidth}
+                domainPadding={50}
+                containerComponent={<VictoryVoronoiContainer />}
+              >
+                <VictoryLine
+                  labels={({ datum }) => `$${datum.y}`}
+                  labelComponent={
+                    <VictoryTooltip
+                      style={{ fontSize: 18 } as any}
+                      renderInPortal
+                      dy={-20}
+                    />
+                  }
+                  data={data?.myRestaurant.restaurant?.orders.map((order) => ({
+                    x: order.createdAt,
+                    y: order.total,
+                  }))}
+                  interpolation="natural"
+                  style={{
+                    data: {
+                      strokeWidth: 5,
+                    },
+                  }}
+                />
+                <VictoryAxis
+                  tickLabelComponent={<VictoryLabel renderInPortal />}
+                  style={{
+                    tickLabels: {
+                      fontSize: 20,
+                    } as any,
+                  }}
+                  tickFormat={(tick) => new Date(tick).toLocaleDateString("ko")}
+                />
+              </VictoryChart>
+          </div>
+        </div>
       </div>
+    </div>
     </div>
   );
 };
