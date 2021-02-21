@@ -1,0 +1,3 @@
+/api    https://uber-eats-clone-backend.herokuapp.com/graphql
+/ws     ws://uber-eats-clone-backend.herokuapp.com/graphql
+/*  /index.html 200
